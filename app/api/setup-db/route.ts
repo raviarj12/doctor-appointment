@@ -6,20 +6,22 @@ export async function GET() {
     const supabase = createServerSupabaseClient()
 
     // Create the appointments table if it doesn't exist
-    const { error: createTableError } = await supabase.query(`
-      CREATE TABLE IF NOT EXISTS appointments (
-        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-        doctor TEXT NOT NULL,
-        appointment_date DATE NOT NULL,
-        appointment_time TEXT NOT NULL,
-        patient_name TEXT NOT NULL,
-        contact_number TEXT NOT NULL,
-        medical_reason TEXT NOT NULL,
-        additional_notes TEXT,
-        created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-        status TEXT DEFAULT 'confirmed'
-      )
-    `)
+    const { error: createTableError } = await supabase.rpc('exec_sql', {
+      sql: `
+        CREATE TABLE IF NOT EXISTS appointments (
+          id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+          doctor TEXT NOT NULL,
+          appointment_date DATE NOT NULL,
+          appointment_time TEXT NOT NULL,
+          patient_name TEXT NOT NULL,
+          contact_number TEXT NOT NULL,
+          medical_reason TEXT NOT NULL,
+          additional_notes TEXT,
+          created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+          status TEXT DEFAULT 'confirmed'
+        )
+      `
+    })
 
     if (createTableError) {
       console.error("Error creating table:", createTableError)
@@ -27,10 +29,12 @@ export async function GET() {
     }
 
     // Create indexes for faster queries
-    const { error: createIndexError } = await supabase.query(`
-      CREATE INDEX IF NOT EXISTS idx_appointments_doctor ON appointments(doctor);
-      CREATE INDEX IF NOT EXISTS idx_appointments_date ON appointments(appointment_date);
-    `)
+    const { error: createIndexError } = await supabase.rpc('exec_sql', {
+      sql: `
+        CREATE INDEX IF NOT EXISTS idx_appointments_doctor ON appointments(doctor);
+        CREATE INDEX IF NOT EXISTS idx_appointments_date ON appointments(appointment_date);
+      `
+    })
 
     if (createIndexError) {
       console.error("Error creating indexes:", createIndexError)

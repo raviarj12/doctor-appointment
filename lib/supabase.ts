@@ -4,12 +4,12 @@ import { createClient } from "@supabase/supabase-js"
 const supabaseUrl = process.env.SUPABASE_URL as string
 const supabaseAnonKey = process.env.SUPABASE_ANON_KEY as string
 
-if (!supabaseUrl) {
-  throw new Error('Missing env.SUPABASE_URL')
-}
-if (!supabaseAnonKey) {
-  throw new Error('Missing env.SUPABASE_ANON_KEY')
-}
+// if (!supabaseUrl) {
+//   throw new Error('Missing env.SUPABASE_URL')
+// }
+// if (!supabaseAnonKey) {
+//   throw new Error('Missing env.SUPABASE_ANON_KEY')
+// }
 
 // Create a single supabase client for the server
 export const createServerSupabaseClient = () => {

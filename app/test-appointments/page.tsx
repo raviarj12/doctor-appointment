@@ -25,7 +25,7 @@ export default function TestAppointments() {
     try {
       const result = await getAppointments()
       if (result.success) {
-        setAppointments(result.data)
+        setAppointments(result.data ?? [])
         setStatus('success')
       } else {
         setStatus('error')
@@ -42,7 +42,11 @@ export default function TestAppointments() {
     setStatus('loading')
 
     try {
-      const result = await createAppointment(formData)
+      const formDataInstance = new FormData()
+      Object.entries(formData).forEach(([key, value]) => {
+        formDataInstance.append(key, value)
+      })
+      const result = await createAppointment(formDataInstance)
       if (result.success) {
         setStatus('success')
         // Reset form

@@ -266,8 +266,8 @@ export default function DoctorsProfile() {
                       <PopoverContent className="w-auto p-0">
                         <CalendarComponent
                           mode="single"
-                          selected={date}
-                          onSelect={setDate}
+                          selected={date ?? undefined}
+                          onSelect={(day) => setDate(day ?? null)}
                           initialFocus
                           disabled={
                             (date) => date < new Date(new Date().setHours(0, 0, 0, 0)) || date.getDay() === 0 // Disable Sundays
